@@ -15,6 +15,15 @@ public:
             components.push_back(i);
         }
     }
+    Vector& operator=(const Vector& other){
+        if(&other == this){
+            return *this;
+        }
+        components.clear();
+        for(double i : other.components)
+            components.push_back(i);
+        return *this;
+    }
     Vector operator*(double alpha){
         Vector v(this->components.size());
         for(long long i = 0; i < this->components.size(); i++)
@@ -59,6 +68,9 @@ public:
     double calculate_angle(const Vector& other) const{
         return this->dot_product(other) / (this->length() * other.length());
     }
+    unsigned long long get_size(){
+        return components.size();
+    }
 
 };
 
@@ -68,12 +80,27 @@ private:
     std::vector<std::vector<double>>mat;
     unsigned long long size1, size2;
 public:
-    Matrix(unsigned long long size1, unsigned long long size2){
+    Matrix(unsigned long long size1, unsigned long long size2): size1(size1), size2(size2){
         for(int i = 0; i < size1; i++){
+            std::vector<double>v1;
             for(int j = 0; j < size2; j++ ){
-
+                v1.push_back(0);
             }
+            mat.push_back(v1);
         }
+    }
+    explicit Matrix(double m[4][4]){  //Most used matrix deserves its own initialisation
+        size1 = size2 = 4;
+        for(int i = 0; i < size1; i++){
+            std::vector<double>v1;
+            for(int j = 0; j < size2; j++){
+                v1.push_back(m[i][j]);
+            }
+            mat.push_back(v1);
+        }
+    }
+    Vector& operator*(const Vector& v) const{
+        Vector rezultat = Vector(4);
     }
 };
 
