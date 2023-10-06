@@ -5,9 +5,9 @@
 21	339	7164977937493473	_deps/sfml-build/src/SFML/System/CMakeFiles/sfml-system.dir/Sleep.cpp.obj	ec30780a133afa6b
 12695	13105	7164978065192161	_deps/sfml-build/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir/View.cpp.obj	a06de080f1b6ba68
 25	345	7164977937583231	_deps/sfml-build/src/SFML/System/CMakeFiles/sfml-system.dir/Lock.cpp.obj	b2b8e14f732759c3
-7073	8987	7164978024002254	_deps/sfml-build/src/SFML/Window/CMakeFiles/sfml-window.dir/Win32/JoystickImpl.cpp.obj	7a69f590ca127724
 339	1455	7164977948673592	_deps/sfml-build/src/SFML/System/CMakeFiles/sfml-system.dir/Thread.cpp.obj	da5efef5b033a999
 13106	13458	7164978068712756	_deps/sfml-build/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir/ConvexShape.cpp.obj	e9efde2057e880ab
+7073	8987	7164978024002254	_deps/sfml-build/src/SFML/Window/CMakeFiles/sfml-window.dir/Win32/JoystickImpl.cpp.obj	7a69f590ca127724
 335	1449	7164977948623725	_deps/sfml-build/src/SFML/System/CMakeFiles/sfml-system.dir/Mutex.cpp.obj	5174d24ab2a04c40
 4863	5259	7164977986721902	_deps/sfml-build/src/SFML/Window/CMakeFiles/sfml-window.dir/VideoMode.cpp.obj	92ca016bfd46f5f
 6	1119	7164980125827024	CMakeFiles/3dSim1.dir/main.cpp.obj	c445cdfd9f2ba62e
@@ -75,3 +75,5 @@
 14275	15206	7164978086196018	_deps/sfml-build/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir/RenderTextureImplDefault.cpp.obj	e1ef31bc55a4ca93
 13879	15320	7164978087323007	_deps/sfml-build/src/SFML/Graphics/CMakeFiles/sfml-graphics.dir/RenderTextureImplFBO.cpp.obj	af294f0ad87ead76
 15320	15628	7164978090424359	_deps/sfml-build/lib/libsfml-graphics-s-d.a	36c5ad26445c0d2c
+7	1172	7183105034968643	CMakeFiles/3dSim1.dir/main.cpp.obj	c445cdfd9f2ba62e
+1173	1714	7183105040324473	3dSim1.exe	90791abdfaa64656

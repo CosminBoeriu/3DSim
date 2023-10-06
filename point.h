@@ -35,6 +35,22 @@ public:
             this->components[i] = v.components[i] * alpha;
         return v;
     }
+    double operator*(const Vector& other) const{
+        double sum = 0;
+        if(other.components.size() != this->components.size())
+            throw std::invalid_argument("Sizes of Vectors are not equal");
+        for(long long i = 0; i < this->components.size(); i++)
+            sum += components[i] * other.components[i];
+        return sum;
+    }
+    double operator*(const std::vector<double>& v) const{
+        double sum = 0;
+        if(v.size() != this->components.size())
+            throw std::invalid_argument("Sizes of Vectors are not equal");
+        for(long long i = 0; i < this->components.size(); i++)
+            sum += components[i] * v[i];
+        return sum;
+    }
     Vector operator+(const Vector& other){
         if(other.components.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");
@@ -54,26 +70,11 @@ public:
             sum += elem * elem;
         return sqrt(sum);
     }
-    double dot_product(const Vector& other ) const {  // Returns the dot product of this object's components and argument
-        double sum = 0;
-        if(other.components.size() != this->components.size())
-            throw std::invalid_argument("Sizes of Vectors are not equal");
-        for(long long i = 0; i < this->components.size(); i++)
-            sum += components[i] * other.components[i];
-        return sum;
-    }
-    double dot_product(const std::vector<double>&v) const{
-        double sum = 0;
-        if(v.size() != this->components.size())
-            throw std::invalid_argument("Sizes of Vectors are not equal");
-        for(long long i = 0; i < this->components.size(); i++)
-            sum += components[i] * v[i];
-        return sum;
-    }
+
     double calculate_angle(const Vector& other) const{  // Calculates the angle between this vector and argument
-        return this->dot_product(other) / (this->length() * other.length());
+        return *this * other / (this->length() * other.length());
     }
-    unsigned long long get_size(){  // Returns the size of vector
+    unsigned long long get_size() const{  // Returns the size of vector
         return components.size();
     }
 
@@ -87,23 +88,33 @@ private:
 public:
     Matrix(unsigned long long size1, unsigned long long size2): size1(size1), size2(size2){
         for(int i = 0; i < size1; i++){
-            mat.push_back(Vector(size2));
+            mat.emplace_back(size2);
         }
     }
-    explicit Matrix(const std::vector<std::vector>&v){
-        size1 = size2 = 4;
+    explicit Matrix(const std::vector<std::vector<double>>&v){
+        size1 = v.size(); size2 = v[0].size();
         for(int i = 0; i < size1; i++){
-            std::vector<double>v1;
+            Vector v1(size2);
             for(int j = 0; j < size2; j++){
-                v1.push_back(m[i][j]);
+                v1[j] = v[i][j];
             }
-            mat.push_back(v1);
+            mat[i] = v1;
         }
     }
-    Vector& operator*(const Vector& v) const{
-        Vector rezultat = Vector(4);
-
+    Vector operator*(const Vector& v) const{
+        Vector rez = Vector(size1);
+        if( v.get_size() != size2 ){
+            throw std::invalid_argument("Matrix and Vector sizes are not compatible for product operation");
+        }
+        for(int i = 0; i < size1; i++){
+            rez[i] = mat[i] * v;
+        }
+        return rez;
     }
-
+    Vector& operator[](unsigned long long index){
+        if(index >= size1 )
+            throw std::invalid_argument("Array index out of bounds");
+        return mat[index];
+    }
 };
 
