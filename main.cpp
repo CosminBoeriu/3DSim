@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "matrix.h"
 
 int main()
 {
+    CALCULATE_ROTATION_MATRIX();
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 

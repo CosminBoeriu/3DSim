@@ -91,16 +91,38 @@ private:
 };
 
 class rotationMatrix: public Matrix{
-private:
-    static std::map<int, double>sin_preCalc, cos_preCalc;
-    static int angleTr(double angle){
-        return int(angle * 10000);
-    }
-    static void preCalc(){
-        for(int i = 0; i < 2 * PI * 10000; i++){
-            sin_preCalc[i] = sin(double(i)/10000);
-            cos_preCalc[i] = cos(double(i)/10000);
+public:
+    rotationMatrix(double angle, int axis, int size = 4): Matrix(size, size){ // axis: 0 = x, 1 = y, 2 = z
+        double cosAngle = std::cos(angle);
+        double sinAngle = std::sin(angle);
+        for(int i = 0; i < size; i++)
+            mat[i][i] = 1;
+        if(axis == 0){
+            mat[1][1] = mat[2][2] = cosAngle;
+            mat[1][2] = sinAngle;
+            mat[2][1] = -sinAngle;
+            return;
+        }
+        if(axis == 1){
+            mat[0][0] = mat[2][2] = cosAngle;
+            mat[0][2] = -sinAngle;
+            mat[2][0] = sinAngle;
+            return;
+        }
+        if(axis == 2){
+            mat[0][0] = mat[1][1] = cosAngle;
+            mat[0][1] = sinAngle;
+            mat[1][0] = -sinAngle;
         }
     }
 };
-// Proba
+
+std::map<int, std::vector<std::unique_ptr<Matrix>>>PRECALCULATED_ROTATION_MATRIX;
+void CALCULATE_ROTATION_MATRIX(){
+    for(int i = 0; i < int(2 * PI * 100); i++){
+        PRECALCULATED_ROTATION_MATRIX[i] = std::vector<std::unique_ptr<Matrix>>();
+        for(int j = 0; j < 3; j++ ) {
+            PRECALCULATED_ROTATION_MATRIX[i].push_back(std::unique_ptr<Matrix>(new rotationMatrix(double(i) / 100, j, 4)));
+        }
+    }
+}
