@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "matrix.h"
 
 int main()
 {
