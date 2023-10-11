@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #define PI 3.14159265359
@@ -25,8 +26,8 @@ public:
             return *this;
         }
         components.clear();
-        for(double i : other.components)
-            components.push_back(i);
+        for(int i = 0; i < other.components.size(); i++)
+            components.push_back(other.components[i]);
         return *this;
     }
     Vector operator*(double factor) const{
@@ -51,12 +52,12 @@ public:
             sum += components[i] * v[i];
         return sum;
     }
-    Vector operator+(const Vector& other){
+    Vector operator+(const Vector& other) const{
         if(other.components.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");
         Vector v(this->components.size());
         for(long long i = 0; i < this->components.size(); i++)
-            this->components[i] = v.components[i];
+            v.components[i] = this->components[i] + other.components[i];
         return v;
     }
     double& operator[](unsigned long long index){  // Returns a reference to components[index]
@@ -66,15 +67,27 @@ public:
     }
     double length() const {  // Returns modulus of vector
         double sum = 0;
-        for(double elem : components)
-            sum += elem * elem;
+        for(int i =0; i < components.size()-1; i++)
+            sum += components[i] * components[i];
         return sqrt(sum);
     }
 
     double calculate_angle(const Vector& other) const{  // Calculates the angle between this vector and argument
-        return *this * other / (this->length() * other.length());
+        return std::acos(*this * other / (this->length() * other.length()));
     }
     unsigned long long get_size() const{  // Returns the size of vector
         return components.size();
     }
+    Vector get_perpendicular_vector(Vector other){
+        //TODO IMPLEMENT FOR OTHER DIMENSIONS !!!
+        if(other.components.size() != 4 )
+            throw std::invalid_argument("TO BE IMPLEMENTED");
+        Vector v(std::vector<double>{components[1] * other[2] - components[2] * other[1],
+                                        components[2] * other[0] - components[0] * other[2],
+                                        components[0] * other[1] - components[1] * other[0]});
+        if(v[2] < 0)
+            return v * -1;
+        return v;
+    }
+
 };

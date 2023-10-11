@@ -1,4 +1,7 @@
+#pragma once
+#include <memory>
 #include "vector.h"
+#define PRECISION_ANGLE 100
 
 class Matrix{
 protected:
@@ -91,16 +94,50 @@ private:
 };
 
 class rotationMatrix: public Matrix{
-private:
-    static std::map<int, double>sin_preCalc, cos_preCalc;
-    static int angleTr(double angle){
-        return int(angle * 10000);
-    }
-    static void preCalc(){
-        for(int i = 0; i < 2 * PI * 10000; i++){
-            sin_preCalc[i] = sin(double(i)/10000);
-            cos_preCalc[i] = cos(double(i)/10000);
+public:
+    /**This map is a static precalculated structure that stores rotation matrices for every angle with .00 precision and around every axis **/
+    inline static std::map<int, std::vector<std::shared_ptr<Matrix>>>PRECALCULATED_ROTATION_MATRIX;
+public:
+    static void CALCULATE_ROTATION_MATRIX(){
+        for(int i = 0; i < (int)(2 * PI * PRECISION_ANGLE); i++){
+            PRECALCULATED_ROTATION_MATRIX[i] = std::vector<std::shared_ptr<Matrix>>();
+            for(int j = 0; j < 3; j++ ) {
+                PRECALCULATED_ROTATION_MATRIX[i].push_back(std::shared_ptr<Matrix>(new rotationMatrix((double)i / PRECISION_ANGLE, j, 4)));
+            }
         }
     }
+    rotationMatrix(double angle, int axis, int size = 4): Matrix(size, size){ // axis: 0 = x, 1 = y, 2 = z
+        double cosAngle = std::cos(angle);
+        double sinAngle = std::sin(angle);
+        for(int i = 0; i < size; i++)
+            mat[i][i] = 1;
+        if(axis == 0){
+            mat[1][1] = mat[2][2] = cosAngle;
+            mat[1][2] = sinAngle;
+            mat[2][1] = -sinAngle;
+            return;
+        }
+        if(axis == 1){
+            mat[0][0] = mat[2][2] = cosAngle;
+            mat[0][2] = -sinAngle;
+            mat[2][0] = sinAngle;
+            return;
+        }
+        if(axis == 2){
+            mat[0][0] = mat[1][1] = cosAngle;
+            mat[0][1] = sinAngle;
+            mat[1][0] = -sinAngle;
+        }
+    }
+    static Vector rotateAroundAxis(const Vector& v, double angle, int axis){
+        /** Axis can be either OX, OY, OZ.
+        0 < ANGLE < 2 * PI determines the rotation angle of vector v around said axis **/
+        while(angle < 0)
+            angle += 2 * PI;
+        std::shared_ptr<Matrix>m = (PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis]);
+        Vector rez = (*m) * v;
+        return rez;
+    }
 };
-// Proba
+
+
