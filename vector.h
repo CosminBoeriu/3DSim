@@ -40,7 +40,7 @@ public:
         double sum = 0;
         if(other.components.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");
-        for(long long i = 0; i < this->components.size(); i++)
+        for(long long i = 0; i < this->components.size()-1; i++)
             sum += components[i] * other.components[i];
         return sum;
     }
@@ -48,7 +48,7 @@ public:
         double sum = 0;
         if(v.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");
-        for(long long i = 0; i < this->components.size(); i++)
+        for(long long i = 0; i < this->components.size()-1; i++)
             sum += components[i] * v[i];
         return sum;
     }
@@ -71,23 +71,34 @@ public:
             sum += components[i] * components[i];
         return sqrt(sum);
     }
+    Vector cross_product(const Vector& other) const{
+        return Vector(std::vector<double>{components[1] * other.components[2] - components[2] * other.components[1],
+                                          components[0] * other.components[2] - components[2] * other.components[0],
+                                          components[0] * other.components[1] - components[1] * other.components[0],
+                                          1});
+    }
 
     double calculate_angle(const Vector& other) const{  // Calculates the angle between this vector and argument
-        return std::acos(*this * other / (this->length() * other.length()));
+        Vector normal = (get_perpendicular_vector(other)).get_normalised();
+        return std::acos((*this * other ) / (normal * cross_product(other)));
     }
     unsigned long long get_size() const{  // Returns the size of vector
         return components.size();
     }
-    Vector get_perpendicular_vector(Vector other){
+    [[nodiscard]] Vector get_normalised() const{
+        return *this * (1 / this->length());
+    }
+    Vector get_perpendicular_vector(Vector other) const{
         //TODO IMPLEMENT FOR OTHER DIMENSIONS !!!
         if(other.components.size() != 4 )
             throw std::invalid_argument("TO BE IMPLEMENTED");
         Vector v(std::vector<double>{components[1] * other[2] - components[2] * other[1],
                                         components[2] * other[0] - components[0] * other[2],
-                                        components[0] * other[1] - components[1] * other[0]});
+                                        components[0] * other[1] - components[1] * other[0],
+                                        1});
         if(v[2] < 0)
             return v * -1;
-        return v;
+        return v.get_normalised();
     }
 
 };

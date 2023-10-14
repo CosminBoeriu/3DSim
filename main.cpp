@@ -7,9 +7,13 @@ int main()
 {
     rotationMatrix::CALCULATE_ROTATION_MATRIX();
 
-    Vector v1(std::vector<double>{0, 0, 0, 1});
-    LineSegment ls = LineSegment(v1, -0.7853981634, 0.615479, 1);
-    std::array<Vector, 2>x = ls.get_ends();
+    Vector v1(std::vector<double>{sqrt(3), 0, 0, 1});
+    Vector v2(std::vector<double>{1, 1, 1, 1});
+    Vector axis = v1.get_perpendicular_vector(v2);
+    rotationAxis rot = rotationAxis(axis);
+    Vector test = rot.rotateAroundAxis(v1, 54.735610317245346*PI/180);
+
+
 
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
