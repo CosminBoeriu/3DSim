@@ -2,7 +2,7 @@
 #include "matrix.h"
 
 class LineSegment{
-private:
+protected:
     std::array<Vector, 2>ends;
 public:
     explicit LineSegment(const Vector& v1 = Vector(), const Vector& v2 = Vector()){
@@ -21,19 +21,30 @@ public:
     }
 };
 
-class AxisRotation: public LineSegment{
+class rotationAxis: public LineSegment{
     /**THIS CLASS IS SPECIFICALLY MADE FOR VECTORS WITH 4 DIMENSIONS**/
 private:
     double alpha, beta; // alpha = angle between V, beta = angle between V' on XZ and Z
 public:
-    AxisRotation(const Vector& v1, const Vector& v2){
+    explicit rotationAxis(const Vector& v1, const Vector& v2 = Vector(4)){
         Vector v = v2 + (v1 * -1);
+        ends[0] = Vector(4);
+        ends[1] = v;
         if(v[2] < 0)
-            v = (v * -1);
-        Vector projection = v;
+            ends[1] = (v * -1);
+        Vector projection = ends[1];
         projection[1] = 0;
-        alpha = v.calculate_angle(projection);
-        beta = projection.calculate_angle(Vector(std::vector<double>{0, 0, v[2], 1}));
+        alpha = ends[1].calculate_angle(projection);
+        beta = projection.calculate_angle(Vector(std::vector<double>{0, 0, ends[1][2], 1}));
     }
-    Vector rotateAroundAxis();
+    Vector rotateAroundAxis(const Vector& v, double angle) const{
+        Vector rez = v + ends[1] * -1;
+        rez = rotationMatrix::rotateAroundAxis(rez, alpha, 0);
+        rez = rotationMatrix::rotateAroundAxis(rez, beta, 1);
+        rez = rotationMatrix::rotateAroundAxis(rez, angle, 2);
+        rez = rotationMatrix::rotateAroundAxis(rez, -beta, 1);
+        rez = rotationMatrix::rotateAroundAxis(rez, -alpha, 0);
+        rez = rez + ends[1];
+        return rez;
+    };
 };

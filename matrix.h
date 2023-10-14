@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "vector.h"
-#define PRECISION_ANGLE 100
+#define PRECISION_ANGLE 1000
 
 class Matrix{
 protected:
@@ -134,8 +134,7 @@ public:
         0 < ANGLE < 2 * PI determines the rotation angle of vector v around said axis **/
         while(angle < 0)
             angle += 2 * PI;
-        std::shared_ptr<Matrix>m = (PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis]);
-        Vector rez = (*m) * v;
+        Vector rez = (*(PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis])) * v;
         return rez;
     }
 };
