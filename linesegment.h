@@ -38,13 +38,13 @@ public:
         beta = projection.calculate_angle(Vector(std::vector<double>{0, 0, ends[1][2], 1}));
     }
     Vector rotateAroundAxis(const Vector& v, double angle) const{
-        Vector rez = v + ends[1] * -1;
+        Vector rez = v + ends[0] * -1;
         rez = rotationMatrix::rotateAroundAxis(rez, alpha, 0);
         rez = rotationMatrix::rotateAroundAxis(rez, beta, 1);
         rez = rotationMatrix::rotateAroundAxis(rez, angle, 2);
         rez = rotationMatrix::rotateAroundAxis(rez, -beta, 1);
         rez = rotationMatrix::rotateAroundAxis(rez, -alpha, 0);
-        rez = rez + ends[1];
+        rez = rez + ends[0];
         return rez;
     };
 };

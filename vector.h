@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #define PI 3.14159265359
+#define epsilon 0.00000001
 
 class Vector{
 private:
@@ -32,7 +33,7 @@ public:
     }
     Vector operator*(double factor) const{
         Vector v(this->components.size());
-        for(long long i = 0; i < this->components.size(); i++)
+        for(long long i = 0; i < this->components.size()-1; i++)
             v.components[i] = this->components[i] * factor;
         return v;
     }
@@ -67,7 +68,7 @@ public:
     }
     double length() const {  // Returns modulus of vector
         double sum = 0;
-        for(int i =0; i < components.size()-1; i++)
+        for(int i = 0; i < components.size()-1; i++)
             sum += components[i] * components[i];
         return sqrt(sum);
     }
@@ -79,8 +80,12 @@ public:
     }
 
     double calculate_angle(const Vector& other) const{  // Calculates the angle between this vector and argument
-        Vector normal = (get_perpendicular_vector(other)).get_normalised();
-        return std::acos((*this * other ) / (normal * cross_product(other)));
+        double val = (*this * other ) / (other.length() * this->length());
+        if(val > 1 or val < -1){
+            std::cout<<val;
+            val = val > 1 ? val - epsilon : val + epsilon;
+        }
+        return std::acos(val);
     }
     unsigned long long get_size() const{  // Returns the size of vector
         return components.size();

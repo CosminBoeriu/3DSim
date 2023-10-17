@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "vector.h"
-#define PRECISION_ANGLE 1000
+#define PRECISION_ANGLE 10000
 
 class Matrix{
 protected:
@@ -66,13 +66,30 @@ public:
         }
         return rez;
     }
+    Matrix operator*(const Matrix& m) const{
+        if(this->size2 != m.size1)
+            throw std::invalid_argument("Invalid Matrices sizes");
+        Matrix rez(this->size1, m.size2);
+        for(int i = 0; i < size1; i++){
+            for(int j = 0; j < size2; j++){
+                for(int k = 0; k < m.size2; k++){
+                    rez[i][k] = this->get_row(i).operator[](j) * m.get_row(j).operator[](k);
+                }
+            }
+        }
+        return rez;
+    }
+    double determinant(){
+        ///ONLY IMPLEMENTED FOR SIZE 4:
+
+    }
     Vector& operator[](unsigned long long index){
         if(index >= size1 )
             throw std::invalid_argument("Array index out of bounds");
         return mat[index];
     }
     Vector get_row(unsigned long long index) const{
-        return {(mat[index])};
+        return Vector(mat[index]);
     }
 };
 
