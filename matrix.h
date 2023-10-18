@@ -79,9 +79,10 @@ public:
         }
         return rez;
     }
-    double determinant(){
-        ///ONLY IMPLEMENTED FOR SIZE 4:
-
+    static double determinant(std::vector<Vector>&v){
+        ///ONLY IMPLEMENTED FOR SIZE 3:
+        return v[0][0] * v[1][1] * v[2][2] + v[0][1] * v[1][2] * v[2][0] + v[0][2] * v[1][0] * v[2][1] -
+               v[0][2] * v[1][1] * v[2][0] - v[2][1] * v[1][2] * v[0][0] - v[2][2] * v[1][0] * v[0][1];
     }
     Vector& operator[](unsigned long long index){
         if(index >= size1 )

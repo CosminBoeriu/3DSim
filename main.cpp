@@ -2,17 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "linesegment.h"
+#include "frustum.h"
 
 int main()
 {
     rotationMatrix::CALCULATE_ROTATION_MATRIX();
 
-    Vector v1(std::vector<double>{1+sqrt(3), 0, 0, 1});
-    Vector v2(std::vector<double>{2, 1, 1, 1});
+    Vector v1(std::vector<double>{sqrt(3), 0, 0, 1});
+    Vector v2(std::vector<double>{1, 1, 1, 1});
     Vector axis = v1.get_perpendicular_vector(v2);
     rotationAxis rot = rotationAxis(axis);
     Vector test = rot.rotateAroundAxis(v1, -54.735610317245346*PI/180);
 
+    Camera CAMERA = Camera();
+    Vector test2 = CAMERA.calculate_new_coordinates(test);
 
 
     // Create the main window

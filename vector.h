@@ -12,11 +12,13 @@ public:
         for(int i = 0; i < size; i++)
             components.push_back(0);
     }
-    explicit Vector( const std::vector<double>&v){  // Takes a std::vector and initializes a Vector with said elements
-        for(auto i : v){
-            components.push_back(i);
+    explicit Vector(const std::vector<double>&v){  // Takes a std::vector and initializes a Vector with said elements
+        components.clear();
+        for(int i = 0; i < v.size(); i++){
+            components.push_back(v[i]);
         }
     }
+
     Vector(const Vector& other){
         components.clear();
         for(double i : other.components)
@@ -105,5 +107,4 @@ public:
             return v * -1;
         return v.get_normalised();
     }
-
 };
