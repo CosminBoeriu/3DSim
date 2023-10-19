@@ -2,13 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #define PI 3.14159265359
-#define epsilon 0.00000001
+#define epsilon 0.000001
 
 class Vector{
 private:
     std::vector<double>components;
 public:
     explicit Vector(unsigned long long size = 0){  // Initializes a Vector full of 0's of size
+        components.clear();
         for(int i = 0; i < size; i++)
             components.push_back(0);
     }
@@ -68,11 +69,18 @@ public:
             throw std::invalid_argument("Array index out of bounds");
         return components[index];
     }
-    double length() const {  // Returns modulus of vector
+    [[nodiscard]] double length() const {  // Returns modulus of vector
         double sum = 0;
         for(int i = 0; i < components.size()-1; i++)
             sum += components[i] * components[i];
         return sqrt(sum);
+    }
+    [[nodiscard]] double distance(const Vector& v) const{
+        double sum = 0;
+        for( int i = 0; i < v.get_size(); i++ ){
+            sum = sum + (components[i] - v.components[i]) * (components[i]  * v.components[i]);
+        }
+        return std::sqrt(sum);
     }
     Vector cross_product(const Vector& other) const{
         return Vector(std::vector<double>{components[1] * other.components[2] - components[2] * other.components[1],
@@ -91,6 +99,9 @@ public:
     }
     unsigned long long get_size() const{  // Returns the size of vector
         return components.size();
+    }
+    double get_elem(int i) const {
+        return components[i];
     }
     [[nodiscard]] Vector get_normalised() const{
         return *this * (1 / this->length());

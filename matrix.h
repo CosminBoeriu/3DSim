@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "vector.h"
-#define PRECISION_ANGLE 10000
+#define PRECISION_ANGLE 1000
 
 class Matrix{
 protected:
@@ -10,23 +10,24 @@ protected:
 public:
     explicit Matrix(unsigned long long size1 = 0, unsigned long long size2 = 0): size1(size1), size2(size2){
         for(int i = 0; i < size1; i++){
-            mat.emplace_back(size2);
+            mat.push_back(Vector(size2));
         }
     }
     explicit Matrix(const std::vector<std::vector<double>>&v){
+        mat.clear();
         size1 = v.size(); size2 = v[0].size();
         for(int i = 0; i < size1; i++){
             Vector v1(size2);
             for(int j = 0; j < size2; j++){
                 v1[j] = v[i][j];
             }
-            mat[i] = v1;
+            mat.push_back(v1);
         }
     }
     Matrix(const Matrix& other){
         mat.clear();
         for(int i = 0; i < other.size1; i++){
-            mat[i] = other.get_row(i);
+            mat.push_back(other.get_row(i));
         }
         size1 = other.size1;
         size2 = other.size2;
@@ -37,7 +38,7 @@ public:
         }
         mat.clear();
         for(int i = 0; i < other.size1; i++){
-            mat[i] = other.get_row(i);
+            mat.push_back(other.get_row(i));
         }
         size1 = other.size1;
         size2 = other.size2;
@@ -72,8 +73,9 @@ public:
         Matrix rez(this->size1, m.size2);
         for(int i = 0; i < size1; i++){
             for(int j = 0; j < size2; j++){
+                rez[i][j] = 0;
                 for(int k = 0; k < m.size2; k++){
-                    rez[i][k] = this->get_row(i).operator[](j) * m.get_row(j).operator[](k);
+                    rez[i][j] += this->get_row(i).operator[](k) * m.get_row(k).operator[](i);
                 }
             }
         }
@@ -91,6 +93,10 @@ public:
     }
     Vector get_row(unsigned long long index) const{
         return Vector(mat[index]);
+    }
+    void change_column(const Vector& v, int col){
+        for(int i = 0; i < v.get_size(); i++)
+            mat[i][col] = v.get_elem(i);
     }
 };
 
@@ -117,7 +123,7 @@ public:
     inline static std::map<int, std::vector<std::shared_ptr<Matrix>>>PRECALCULATED_ROTATION_MATRIX;
 public:
     static void CALCULATE_ROTATION_MATRIX(){
-        for(int i = 0; i < (int)(2 * PI * PRECISION_ANGLE); i++){
+        for(int i = 0; i <= (int)(2 * PI * PRECISION_ANGLE); i++){
             PRECALCULATED_ROTATION_MATRIX[i] = std::vector<std::shared_ptr<Matrix>>();
             for(int j = 0; j < 3; j++ ) {
                 PRECALCULATED_ROTATION_MATRIX[i].push_back(std::shared_ptr<Matrix>(new rotationMatrix((double)i / PRECISION_ANGLE, j, 4)));
@@ -150,9 +156,17 @@ public:
     static Vector rotateAroundAxis(const Vector& v, double angle, int axis){
         /** Axis can be either OX, OY, OZ.
         0 < ANGLE < 2 * PI determines the rotation angle of vector v around said axis **/
-        while(angle < 0)
+        while(angle < 0 - epsilon)
             angle += 2 * PI;
         Vector rez = (*(PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis])) * v;
+        return rez;
+    }
+    static Matrix get_rotation_matrix(double angle, int axis){
+        while(angle <= 0)
+            angle += 2 * PI;
+        if(2 * PI - angle < epsilon)
+            angle = 2 * PI - epsilon;
+        Matrix rez = (*(PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis]));
         return rez;
     }
 };

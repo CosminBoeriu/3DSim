@@ -15,8 +15,9 @@ int main()
     Vector test = rot.rotateAroundAxis(v1, -54.735610317245346*PI/180);
 
     Camera CAMERA = Camera();
-    Vector test2 = CAMERA.calculate_new_coordinates(test);
 
+    Vector point_in_space(std::vector<double>{1000, 0, 2000, 1});
+    Vector test2 = CAMERA.get_coordinates_of_point(point_in_space);
 
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
