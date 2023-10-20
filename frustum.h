@@ -4,7 +4,7 @@ class Camera{
 protected:
     double alpha, beta; /// ALPHA = rotation around OX, BETA = rotation around OY; -85 degrees < ALPHA < 85 degrees
     std::vector<Vector>base;  //
-    Vector focalPoint = Vector(4), defaultScreenCenter = Vector(4), rotatedScreenCenter = Vector(4);
+    Vector focalPoint = Vector(std::vector<double>{0, 0, 0, 1}), defaultScreenCenter = Vector(4), rotatedScreenCenter = Vector(4);
     double nearDist = 1000, farDist = 10000;
     Matrix transform, distanceMat;
 public:
@@ -41,13 +41,30 @@ public:
         return rez;
     }
     Vector get_coordinates_of_point(const Vector& v){
-        return transform * v;
+        Vector rez = transform * v;
+        for(int i = 0; i < rez.get_size(); i++)
+            rez[i] = rez[i] / rez[rez.get_size()-1];
+        return rez;
     }
     void calculate_matrix(){
         transform = Matrix::identityMatrix(4);
         transform.change_column(focalPoint, 3);
-        transform = rotationMatrix::get_rotation_matrix(-beta, 1) * rotationMatrix::get_rotation_matrix(-alpha, 0) * transform;
+        transform = (rotationMatrix::get_rotation_matrix(-beta, 1) * rotationMatrix::get_rotation_matrix(-alpha, 0)) * transform;
         transform = distanceMat * transform;
+    }
+    void add_to_angle_alpha(double add){
+        this->alpha += add;
+        if(alpha > 85 * PI / 180)
+            alpha = 85 * PI / 180;
+        if(alpha < (365-85) * PI / 180)
+            alpha = (365-85) * PI / 180;
+    }
+    void add_to_angle_beta(double add){
+        this->beta += add;
+        if( this-> beta > 2 * PI)
+            beta -= 2 * PI;
+        if( beta < 0)
+            beta += 2 * PI;
     }
 
 };

@@ -35,12 +35,22 @@ public:
         return *this;
     }
     Vector operator*(double factor) const{
+        ///It does not take into consideration the last coordinate of the vector
         Vector v(this->components.size());
         for(long long i = 0; i < this->components.size()-1; i++)
             v.components[i] = this->components[i] * factor;
         return v;
     }
+    double multiply(const Vector& other) const{
+        double sum = 0;
+        if(other.components.size() != this->components.size())
+            throw std::invalid_argument("Sizes of Vectors are not equal");
+        for(long long i = 0; i < this->components.size(); i++)
+            sum += components[i] * other.components[i];
+        return sum;
+    }
     double operator*(const Vector& other) const{
+        ///It does not take into consideration the last coordinate of the vector
         double sum = 0;
         if(other.components.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");
@@ -49,6 +59,7 @@ public:
         return sum;
     }
     double operator*(const std::vector<double>& v) const{
+        ///It does not take into consideration the last coordinate of the vector
         double sum = 0;
         if(v.size() != this->components.size())
             throw std::invalid_argument("Sizes of Vectors are not equal");

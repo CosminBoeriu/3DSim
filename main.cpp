@@ -16,7 +16,7 @@ int main()
 
     Camera CAMERA = Camera();
 
-    Vector point_in_space(std::vector<double>{1000, 0, 2000, 1});
+    Vector point_in_space(std::vector<double>{1000, 2000, 5000, 1});
     Vector test2 = CAMERA.get_coordinates_of_point(point_in_space);
 
     // Create the main window

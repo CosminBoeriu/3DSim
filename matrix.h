@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "vector.h"
-#define PRECISION_ANGLE 1000
+#define PRECISION_ANGLE 100000
 
 class Matrix{
 protected:
@@ -56,7 +56,7 @@ public:
             throw std::invalid_argument("Matrix and Vector sizes are not compatible for product operation");
         }
         for(int i = 0; i < size1; i++){
-            rez[i] = mat[i] * v;
+            rez[i] = mat[i].multiply(v);
         }
         return rez;
     }
@@ -75,7 +75,7 @@ public:
             for(int j = 0; j < size2; j++){
                 rez[i][j] = 0;
                 for(int k = 0; k < m.size2; k++){
-                    rez[i][j] += this->get_row(i).operator[](k) * m.get_row(k).operator[](i);
+                    rez[i][j] += this->get_row(i).operator[](k) * m.get_row(j).operator[](k);
                 }
             }
         }

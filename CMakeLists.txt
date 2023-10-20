@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(3dSim1 main.cpp vector.h shape.h frustum.h matrix.h matrix.h
         linesegment.h
-        )
+        screen.h
+)
 
 target_link_libraries(3dSim1 sfml-graphics)
