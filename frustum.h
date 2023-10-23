@@ -1,3 +1,4 @@
+#pragma once
 #include "shape.h"
 
 class Camera{
@@ -40,10 +41,17 @@ public:
             rez[2] = epsilon;
         return rez;
     }
-    Vector get_coordinates_of_point(const Vector& v){
+    Vector calculate_coordinates_of_point(const Vector& v)const{
         Vector rez = transform * v;
         for(int i = 0; i < rez.get_size(); i++)
             rez[i] = rez[i] / rez[rez.get_size()-1];
+        return rez;
+    }
+    std::vector<Vector> calculate_coordinates_of_shape(const std::vector<Vector>&sh)const{
+        std::vector<Vector> rez = sh;
+        for(int i = 0; i < rez.size(); i++){
+            rez[i] = calculate_coordinates_of_point(rez[i]);
+        }
         return rez;
     }
     void calculate_matrix(){
@@ -66,5 +74,10 @@ public:
         if( beta < 0)
             beta += 2 * PI;
     }
-
+    void move_camera(const Vector& v){
+        focalPoint = focalPoint + v;
+    }
+    void update(){
+        calculate_matrix();
+    }
 };

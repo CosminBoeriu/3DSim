@@ -26,7 +26,7 @@ class rotationAxis: public LineSegment{
 private:
     double alpha, beta; // alpha = angle between V, beta = angle between V' on XZ and Z
 public:
-    explicit rotationAxis(const Vector& v1, const Vector& v2 = Vector(4)){
+    explicit rotationAxis(const Vector& v1 = Vector(4), const Vector& v2 = Vector(4)){
         Vector v = v2 + (v1 * -1);
         ends[0] = Vector(4);
         ends[1] = v;

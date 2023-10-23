@@ -3,6 +3,7 @@
 #include <iostream>
 #include "linesegment.h"
 #include "frustum.h"
+#include "projection.h"
 
 int main()
 {
@@ -15,29 +16,25 @@ int main()
     Vector test = rot.rotateAroundAxis(v1, -54.735610317245346*PI/180);
 
     Camera CAMERA = Camera();
-
     Vector point_in_space(std::vector<double>{1000, 2000, 5000, 1});
-    Vector test2 = CAMERA.get_coordinates_of_point(point_in_space);
+    Vector test2 = CAMERA.calculate_coordinates_of_point(point_in_space);
 
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    Tetrahedron Shp;
+    Projection Prj(Shp);
+    sf::RenderWindow window(sf::VideoMode(1600, 900), "SFML window");
 
     // Start the game loop
-    while (window.isOpen())
-    {
+    while (window.isOpen()){
         // Process events
         sf::Event event{};
-        while (window.pollEvent(event))
-        {
-            // Close window: exit
+        while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        // Clear screen
+        Prj.update(CAMERA);
+        std::cout<<Prj<<'\n';
         window.clear();
-
-        // Update the window
+        window.draw(Prj.get_edges());
         window.display();
     }
 

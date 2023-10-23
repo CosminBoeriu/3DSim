@@ -34,6 +34,14 @@ public:
             components.push_back(other.components[i]);
         return *this;
     }
+    friend std::ostream& operator<<(std::ostream& output, const Vector& myVec) {
+        for(int i = 0; i < myVec.components.size(); i++)
+            std::cout << myVec.components[i] << ' ';
+        return output;
+    }
+    bool operator<(const Vector& other){
+        return this->components[2] < other.components[2];
+    }
     Vector operator*(double factor) const{
         ///It does not take into consideration the last coordinate of the vector
         Vector v(this->components.size());

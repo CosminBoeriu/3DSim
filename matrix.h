@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "vector.h"
-#define PRECISION_ANGLE 100000
+#define PRECISION_ANGLE 10000
 
 class Matrix{
 protected:
@@ -158,6 +158,8 @@ public:
         0 < ANGLE < 2 * PI determines the rotation angle of vector v around said axis **/
         while(angle < 0 - epsilon)
             angle += 2 * PI;
+        while(angle > 2 * PI)
+            angle -= 2 * PI;
         Vector rez = (*(PRECALCULATED_ROTATION_MATRIX[(int)(angle * PRECISION_ANGLE)][axis])) * v;
         return rez;
     }
