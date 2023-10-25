@@ -110,11 +110,16 @@ public:
 
     double calculate_angle(const Vector& other) const{  // Calculates the angle between this vector and argument
         double val = (*this * other ) / (other.length() * this->length());
-        if(val > 1 or val < -1){
+        if(val >= 1 or val <= -1){
             std::cout<<val;
             val = val > 1 ? val - epsilon : val + epsilon;
         }
-        return std::acos(val);
+        if(std::abs(val) < epsilon)
+            val = epsilon;
+        if( val == val )
+            return std::acos(val);
+        else
+            return 0;
     }
     unsigned long long get_size() const{  // Returns the size of vector
         return components.size();

@@ -8,7 +8,7 @@ protected:
     std::vector<std::vector<int>>trig;
     std::vector<Vector>transformedVec;
     rotationAxis axisRot;
-    double rotationSpeed = 0.01, angle = 0;
+    double rotationSpeed = 0.05, angle = 0;
     Vector center, offset;
     int edges;
 public:
@@ -22,6 +22,13 @@ public:
         center = center * (1.0f / initialVec.size());
         axisRot = rotationAxis(initialVec[0], center);
         ///ONLY FOR 4DIMENSION VECTORS
+    }
+    Vector calculate_transformed_center(){
+        center = Vector(4);
+        for(int i = 0; i < initialVec.size(); i++) {
+            center = center + transformedVec[i];
+        }
+        return center * (1.0f / initialVec.size());
     }
     [[nodiscard]] virtual std::unique_ptr<Shape> clone() const = 0;
     void calculate_transformed(){
@@ -48,7 +55,7 @@ public:
 
 class Tetrahedron: public Shape{
 public:
-    Tetrahedron(): Shape(std::vector<Vector>{Vector({2000, 2000, 2000, 1}), Vector({2000, 2000, 3000, 1}), Vector({3000, 2000, 4000, 1}), Vector({4000, 3000, 4000, 1})},
+    Tetrahedron(): Shape(std::vector<Vector>{Vector({1000, 700, 5000, 1}), Vector({500, 580, 4600, 1}), Vector({500, 810, 4400, 1}), Vector({700, 800, 5000, 1})},
                          std::vector<std::vector<int>>{{1, 2, 3}, {0, 2, 3}, {0, 1, 3}, {0, 1, 2}},
                          std::vector<std::vector<int>>{{0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}}, 6){
 
@@ -56,4 +63,9 @@ public:
     [[nodiscard]] virtual std::unique_ptr<Shape> clone() const override{
         return std::make_unique<Tetrahedron>(*this);
     };
+};
+
+class Cube: public Shape{
+public:
+    Cube(const Vector& center);
 };

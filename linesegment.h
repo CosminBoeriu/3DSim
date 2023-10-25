@@ -28,17 +28,18 @@ private:
 public:
     explicit rotationAxis(const Vector& v1 = Vector(4), const Vector& v2 = Vector(4)){
         Vector v = v2 + (v1 * -1);
-        ends[0] = Vector(4);
+        ends[0] = v + (v1 * -1);
         ends[1] = v;
         if(v[2] < 0)
             ends[1] = (v * -1);
         Vector projection = ends[1];
         projection[1] = 0;
         alpha = ends[1].calculate_angle(projection);
-        beta = projection.calculate_angle(Vector(std::vector<double>{0, 0, ends[1][2], 1}));
+        Vector projection2 = Vector(std::vector<double>{0, 0, ends[1][2], 1});
+        beta = projection.calculate_angle(projection2);
     }
     Vector rotateAroundAxis(const Vector& v, double angle) const{
-        Vector rez = v + ends[0] * -1;
+        Vector rez = v + ends[0];
         rez = rotationMatrix::rotateAroundAxis(rez, alpha, 0);
         rez = rotationMatrix::rotateAroundAxis(rez, beta, 1);
         rez = rotationMatrix::rotateAroundAxis(rez, angle, 2);
